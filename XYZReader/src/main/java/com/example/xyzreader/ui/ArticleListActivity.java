@@ -119,6 +119,8 @@ public class ArticleListActivity extends AppCompatActivity implements
         StaggeredGridLayoutManager sglm =
                 new StaggeredGridLayoutManager(columnCount, StaggeredGridLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(sglm);
+        mIsRefreshing = false;
+        updateRefreshingUI();
     }
 
     @Override
@@ -184,10 +186,19 @@ public class ArticleListActivity extends AppCompatActivity implements
                         + "<br/>" + " by "
                         + mCursor.getString(ArticleLoader.Query.AUTHOR)));
             }
+            holder.thumbnailView.setAspectRatio(mCursor.getFloat(ArticleLoader.Query.ASPECT_RATIO));
+            ViewGroup.LayoutParams p = holder.thumbnailView.getLayoutParams();
+            p.height = holder.thumbnailView.getMeasuredHeight();
+            //p.width = holder.thumbnailView.getWidth();
+            holder.thumbnailView.setLayoutParams(p);
             holder.thumbnailView.setImageUrl(
                     mCursor.getString(ArticleLoader.Query.THUMB_URL),
                     ImageLoaderHelper.getInstance(ArticleListActivity.this).getImageLoader());
-            holder.thumbnailView.setAspectRatio(mCursor.getFloat(ArticleLoader.Query.ASPECT_RATIO));
+            /*
+            String image_url = mCursor.getString(ArticleLoader.Query.THUMB_URL);
+            Picasso.with(ArticleListActivity.this)
+                    .load(image_url)
+                    .into(holder.thumbnailView);*/
         }
 
         @Override

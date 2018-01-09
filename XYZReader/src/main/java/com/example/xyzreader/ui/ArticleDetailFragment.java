@@ -2,12 +2,13 @@ package com.example.xyzreader.ui;
 
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.graphics.Palette;
+import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.format.DateUtils;
 import android.text.method.LinkMovementMethod;
@@ -44,9 +45,8 @@ public class ArticleDetailFragment extends Fragment implements
     private View mRootView;
     private ImageView mPhotoView;
     private int mMutedColor = 0xFF333333;
-
-    private boolean mIsCard = false;
-    private int mStatusBarFullOpacityBottom;
+    private Toolbar mToolbar;
+    private CollapsingToolbarLayout mCollapsingToolbar;
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.sss");
     // Use default locale format
@@ -77,9 +77,6 @@ public class ArticleDetailFragment extends Fragment implements
             mItemId = getArguments().getLong(ARG_ITEM_ID);
         }
 
-        mIsCard = getResources().getBoolean(R.bool.detail_is_card);
-        mStatusBarFullOpacityBottom = getResources().getDimensionPixelSize(
-                R.dimen.detail_card_top_margin);
         setHasOptionsMenu(true);
     }
 
@@ -101,7 +98,7 @@ public class ArticleDetailFragment extends Fragment implements
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        mRootView = inflater.inflate(R.layout.myfragment_article_detail, container, false);
+        mRootView = inflater.inflate(R.layout.fragment_article_detail, container, false);
 
         /*mRootView.findViewById(R.id.share_fab).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,20 +112,6 @@ public class ArticleDetailFragment extends Fragment implements
         */
         bindViews();
         return mRootView;
-    }
-
-    static float progress(float v, float min, float max) {
-        return constrain((v - min) / (max - min), 0, 1);
-    }
-
-    static float constrain(float val, float min, float max) {
-        if (val < min) {
-            return min;
-        } else if (val > max) {
-            return max;
-        } else {
-            return val;
-        }
     }
 
     private Date parsePublishedDate() {
@@ -147,14 +130,15 @@ public class ArticleDetailFragment extends Fragment implements
             return;
         }
 
+        mToolbar = mRootView.findViewById(R.id.details_toolbar);
         TextView titleView = mRootView.findViewById(R.id.article_title);
         TextView bylineView = mRootView.findViewById(R.id.article_byline);
         bylineView.setMovementMethod(new LinkMovementMethod());
         TextView bodyView = mRootView.findViewById(R.id.article_body);
-        mPhotoView = mRootView.findViewById(R.id.photo);
+        mCollapsingToolbar = mRootView.findViewById(R.id.details_toolbar_layout);
+        mPhotoView = mRootView.findViewById(R.id.details_photo);
 
-
-        bodyView.setTypeface(Typeface.createFromAsset(getResources().getAssets(), "Rosario-Regular.ttf"));
+        //bodyView.setTypeface(Typeface.createFromAsset(getResources().getAssets(), "Rosario-Regular.ttf"));
 
         if (mCursor != null) {
             mRootView.setAlpha(0);
@@ -190,8 +174,7 @@ public class ArticleDetailFragment extends Fragment implements
                                 Palette p = Palette.generate(bitmap, 12);
                                 mMutedColor = p.getDarkMutedColor(0xFF333333);
                                 mPhotoView.setImageBitmap(imageContainer.getBitmap());
-                                mRootView.findViewById(R.id.meta_bar)
-                                        .setBackgroundColor(mMutedColor);
+                                mCollapsingToolbar.setBackgroundColor(mMutedColor);
                             }
                         }
 
