@@ -3,6 +3,7 @@ package com.example.xyzreader.ui;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -18,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
@@ -47,6 +49,7 @@ public class ArticleDetailFragment extends Fragment implements
     private int mMutedColor = 0xFF333333;
     private Toolbar mToolbar;
     private CollapsingToolbarLayout mCollapsingToolbar;
+    private AppBarLayout mAppbarLayout;
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.sss");
     // Use default locale format
@@ -131,12 +134,13 @@ public class ArticleDetailFragment extends Fragment implements
         }
 
         mToolbar = mRootView.findViewById(R.id.details_toolbar);
-        TextView titleView = mRootView.findViewById(R.id.article_title);
-        TextView bylineView = mRootView.findViewById(R.id.article_byline);
+        //TextView titleView = mRootView.findViewById(R.id.article_title);
+        final TextView bylineView = mRootView.findViewById(R.id.article_byline);
         bylineView.setMovementMethod(new LinkMovementMethod());
         TextView bodyView = mRootView.findViewById(R.id.article_body);
         mCollapsingToolbar = mRootView.findViewById(R.id.details_toolbar_layout);
         mPhotoView = mRootView.findViewById(R.id.details_photo);
+        mAppbarLayout = mRootView.findViewById(R.id.details_app_bar);
 
         //bodyView.setTypeface(Typeface.createFromAsset(getResources().getAssets(), "Rosario-Regular.ttf"));
 
@@ -144,7 +148,8 @@ public class ArticleDetailFragment extends Fragment implements
             mRootView.setAlpha(0);
             mRootView.setVisibility(View.VISIBLE);
             mRootView.animate().alpha(1);
-            titleView.setText(mCursor.getString(ArticleLoader.Query.TITLE));
+            //titleView.setText(mCursor.getString(ArticleLoader.Query.TITLE));
+            mToolbar.setTitle(mCursor.getString(ArticleLoader.Query.TITLE));
             Date publishedDate = parsePublishedDate();
             if (!publishedDate.before(START_OF_EPOCH.getTime())) {
                 bylineView.setText(Html.fromHtml(
@@ -164,7 +169,8 @@ public class ArticleDetailFragment extends Fragment implements
                                 + "</font>"));
 
             }
-            bodyView.setText(Html.fromHtml(mCursor.getString(ArticleLoader.Query.BODY).replaceAll("(\r\n|\n)", "<br />")));
+            //bodyView.setText(Html.fromHtml(mCursor.getString(ArticleLoader.Query.BODY).replaceAll("(\r\n|\n)", "<br />")));
+            mToolbar.setSubtitle(Html.fromHtml(mCursor.getString(ArticleLoader.Query.BODY).replaceAll("(\r\n|\n)", "<br />")));
             ImageLoaderHelper.getInstance(getActivity()).getImageLoader()
                     .get(mCursor.getString(ArticleLoader.Query.PHOTO_URL), new ImageLoader.ImageListener() {
                         @Override
@@ -174,7 +180,7 @@ public class ArticleDetailFragment extends Fragment implements
                                 Palette p = Palette.generate(bitmap, 12);
                                 mMutedColor = p.getDarkMutedColor(0xFF333333);
                                 mPhotoView.setImageBitmap(imageContainer.getBitmap());
-                                mCollapsingToolbar.setBackgroundColor(mMutedColor);
+                                //mToolbar.setBackgroundColor(mMutedColor);
                             }
                         }
 
@@ -185,7 +191,8 @@ public class ArticleDetailFragment extends Fragment implements
                     });
         } else {
             mRootView.setVisibility(View.GONE);
-            titleView.setText("N/A");
+            //titleView.setText("N/A");
+            mCollapsingToolbar.setTitle("N/A");
             bylineView.setText("N/A" );
             bodyView.setText("N/A");
         }
