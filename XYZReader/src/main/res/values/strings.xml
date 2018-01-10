@@ -7,4 +7,5 @@
     <string name="action_share">Share</string>
     <string name="up">Up</string>
     <string name="phot_descr">Article photo</string>
+    <string name="finished_loading_articles">Finished loading articles</string>
 </resources>

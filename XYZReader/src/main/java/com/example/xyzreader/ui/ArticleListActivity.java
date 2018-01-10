@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -43,6 +45,7 @@ public class ArticleListActivity extends AppCompatActivity implements
     private static final String TAG = ArticleListActivity.class.toString();
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
+    private CoordinatorLayout mCoordinatorLayout;
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.sss", Locale.US);
     // Use default locale format
@@ -57,9 +60,10 @@ public class ArticleListActivity extends AppCompatActivity implements
 
         mSwipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
         mRecyclerView = findViewById(R.id.recycler_view);
+        mCoordinatorLayout = findViewById(R.id.main_coordinator);
         getSupportLoaderManager().initLoader(0, null, this);
 
-        if (savedInstanceState == null) {
+        if (savedInstanceState == null && !mIsRefreshing) {
             refresh();
         }
     }
@@ -104,6 +108,7 @@ public class ArticleListActivity extends AppCompatActivity implements
 
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
+        Snackbar.make(mCoordinatorLayout, R.string.finished_loading_articles, Snackbar.LENGTH_LONG).show();
         Adapter adapter = new Adapter(cursor);
         adapter.setHasStableIds(true);
         mRecyclerView.setAdapter(adapter);
@@ -181,7 +186,6 @@ public class ArticleListActivity extends AppCompatActivity implements
             holder.thumbnailView.setAspectRatio(mCursor.getFloat(ArticleLoader.Query.ASPECT_RATIO));
             ViewGroup.LayoutParams p = holder.thumbnailView.getLayoutParams();
             p.height = holder.thumbnailView.getMeasuredHeight();
-            //p.width = holder.thumbnailView.getWidth();
             holder.thumbnailView.setLayoutParams(p);
             holder.thumbnailView.setImageUrl(
                     mCursor.getString(ArticleLoader.Query.THUMB_URL),
