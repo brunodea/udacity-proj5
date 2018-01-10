@@ -49,7 +49,6 @@ public class ArticleDetailFragment extends Fragment implements
     private int mMutedColor = 0xFF333333;
     private Toolbar mToolbar;
     private CollapsingToolbarLayout mCollapsingToolbar;
-    private AppBarLayout mAppbarLayout;
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.sss");
     // Use default locale format
@@ -134,15 +133,18 @@ public class ArticleDetailFragment extends Fragment implements
         }
 
         mToolbar = mRootView.findViewById(R.id.details_toolbar);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivityCast().onSupportNavigateUp();
+            }
+        });
         //TextView titleView = mRootView.findViewById(R.id.article_title);
         final TextView bylineView = mRootView.findViewById(R.id.article_byline);
         bylineView.setMovementMethod(new LinkMovementMethod());
         TextView bodyView = mRootView.findViewById(R.id.article_body);
         mCollapsingToolbar = mRootView.findViewById(R.id.details_toolbar_layout);
         mPhotoView = mRootView.findViewById(R.id.details_photo);
-        mAppbarLayout = mRootView.findViewById(R.id.details_app_bar);
-
-        //bodyView.setTypeface(Typeface.createFromAsset(getResources().getAssets(), "Rosario-Regular.ttf"));
 
         if (mCursor != null) {
             mRootView.setAlpha(0);

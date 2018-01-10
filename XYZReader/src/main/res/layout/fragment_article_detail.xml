@@ -51,6 +51,7 @@
                 android:layout_height="?attr/actionBarSize"
                 android:minHeight="?attr/actionBarSize"
                 android:elevation="@dimen/app_bar_elevation"
+                app:navigationIcon="@drawable/ic_arrow_back"
                 app:layout_scrollFlags="scroll|enterAlways"
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/Theme.Bacon.PopupOverlay">
