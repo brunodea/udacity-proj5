@@ -11,14 +11,12 @@
         android:id="@+id/details_app_bar"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:fitsSystemWindows="true"
         android:theme="@style/Theme.Bacon.AppBarOverlay">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/details_toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fitsSystemWindows="true"
             app:expandedTitleMarginStart="48dp"
             app:expandedTitleMarginBottom="160dp"
             app:expandedTitleMarginEnd="64dp"
@@ -30,18 +28,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                android:fitsSystemWindows="true"
                 app:layout_collapseMode="parallax"/>
             <android.support.v7.widget.Toolbar
                 android:id="@+id/details_toolbar"
-                android:layout_marginLeft="@dimen/list_toolbar_side_margin"
-                android:layout_marginRight="@dimen/list_toolbar_side_margin"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:minHeight="?attr/actionBarSize"
-                android:elevation="@dimen/app_bar_elevation"
                 app:navigationIcon="@drawable/ic_arrow_back"
-                app:layout_scrollFlags="scroll|enterAlways"
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/Theme.Bacon.PopupOverlay">
             </android.support.v7.widget.Toolbar>

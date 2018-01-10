@@ -13,7 +13,6 @@ import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.format.DateUtils;
-import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -139,7 +138,7 @@ public class ArticleDetailFragment extends Fragment implements
         });
         final TextView bylineView = mRootView.findViewById(R.id.article_byline);
         TextView titleView = mRootView.findViewById(R.id.article_title);
-        bylineView.setMovementMethod(new LinkMovementMethod());
+        //bylineView.setMovementMethod(new LinkMovementMethod());
         TextView bodyView = mRootView.findViewById(R.id.article_body);
         mCollapsingToolbar = mRootView.findViewById(R.id.details_toolbar_layout);
         mPhotoView = mRootView.findViewById(R.id.details_photo);
