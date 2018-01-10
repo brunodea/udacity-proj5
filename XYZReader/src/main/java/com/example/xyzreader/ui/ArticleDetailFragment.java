@@ -1,11 +1,13 @@
 package com.example.xyzreader.ui;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.app.ShareCompat;
 import android.support.v4.content.Loader;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
@@ -44,7 +46,6 @@ public class ArticleDetailFragment extends Fragment implements
     private long mItemId;
     private View mRootView;
     private ImageView mPhotoView;
-    private int mMutedColor = 0xFF333333;
     private Toolbar mToolbar;
     private CollapsingToolbarLayout mCollapsingToolbar;
 
@@ -100,7 +101,7 @@ public class ArticleDetailFragment extends Fragment implements
             Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_article_detail, container, false);
 
-        /*mRootView.findViewById(R.id.share_fab).setOnClickListener(new View.OnClickListener() {
+        mRootView.findViewById(R.id.share_fab).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(Intent.createChooser(ShareCompat.IntentBuilder.from(getActivity())
@@ -109,7 +110,6 @@ public class ArticleDetailFragment extends Fragment implements
                         .getIntent(), getString(R.string.action_share)));
             }
         });
-        */
         bindViews();
         return mRootView;
     }
@@ -138,6 +138,7 @@ public class ArticleDetailFragment extends Fragment implements
             }
         });
         final TextView bylineView = mRootView.findViewById(R.id.article_byline);
+        TextView titleView = mRootView.findViewById(R.id.article_title);
         bylineView.setMovementMethod(new LinkMovementMethod());
         TextView bodyView = mRootView.findViewById(R.id.article_body);
         mCollapsingToolbar = mRootView.findViewById(R.id.details_toolbar_layout);
@@ -147,7 +148,9 @@ public class ArticleDetailFragment extends Fragment implements
             mRootView.setAlpha(0);
             mRootView.setVisibility(View.VISIBLE);
             mRootView.animate().alpha(1);
+            titleView.setText(mCursor.getString(ArticleLoader.Query.TITLE));
             mCollapsingToolbar.setTitle(mCursor.getString(ArticleLoader.Query.TITLE));
+            mCollapsingToolbar.setExpandedTitleColor(getResources().getColor(android.R.color.transparent));
             Date publishedDate = parsePublishedDate();
             if (!publishedDate.before(START_OF_EPOCH.getTime())) {
                 bylineView.setText(Html.fromHtml(
@@ -175,9 +178,11 @@ public class ArticleDetailFragment extends Fragment implements
                             Bitmap bitmap = imageContainer.getBitmap();
                             if (bitmap != null) {
                                 Palette p = Palette.from(bitmap).generate();
-                                mMutedColor = p.getMutedColor(0xFF333333);
                                 mPhotoView.setImageBitmap(imageContainer.getBitmap());
-                                mCollapsingToolbar.setContentScrimColor(mMutedColor);
+                                mCollapsingToolbar.setContentScrimColor(p.getMutedColor(
+                                        getResources().getColor(R.color.theme_primary)));
+                                mCollapsingToolbar.setStatusBarScrimColor(p.getDarkMutedColor(
+                                        getResources().getColor(R.color.theme_primary_dark)));
                             }
                         }
 
@@ -188,8 +193,9 @@ public class ArticleDetailFragment extends Fragment implements
                     });
         } else {
             mRootView.setVisibility(View.GONE);
+            titleView.setText("N/A");
             mCollapsingToolbar.setTitle("N/A");
-            bylineView.setText("N/A" );
+            bylineView.setText("N/A");
             bodyView.setText("N/A");
         }
     }
