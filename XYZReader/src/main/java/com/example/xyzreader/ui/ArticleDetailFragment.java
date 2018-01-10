@@ -45,7 +45,6 @@ public class ArticleDetailFragment extends Fragment implements
     private long mItemId;
     private View mRootView;
     private ImageView mPhotoView;
-    private Toolbar mToolbar;
     private CollapsingToolbarLayout mCollapsingToolbar;
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.sss");
@@ -129,8 +128,8 @@ public class ArticleDetailFragment extends Fragment implements
             return;
         }
 
-        mToolbar = mRootView.findViewById(R.id.details_toolbar);
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        Toolbar toolbar = mRootView.findViewById(R.id.details_toolbar);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 getActivityCast().onSupportNavigateUp();
@@ -138,7 +137,6 @@ public class ArticleDetailFragment extends Fragment implements
         });
         final TextView bylineView = mRootView.findViewById(R.id.article_byline);
         TextView titleView = mRootView.findViewById(R.id.article_title);
-        //bylineView.setMovementMethod(new LinkMovementMethod());
         TextView bodyView = mRootView.findViewById(R.id.article_body);
         mCollapsingToolbar = mRootView.findViewById(R.id.details_toolbar_layout);
         mPhotoView = mRootView.findViewById(R.id.details_photo);
