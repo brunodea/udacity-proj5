@@ -34,7 +34,6 @@
                 android:fitsSystemWindows="true"
                 app:layout_collapseMode="parallax"/>
             <TextView
-                android:visibility="gone"
                 android:id="@+id/article_byline"
                 style="?android:attr/textAppearanceMedium"
                 android:layout_marginBottom="32dp"
